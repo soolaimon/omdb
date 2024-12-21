@@ -2,17 +2,18 @@ defmodule Omdb do
   @moduledoc """
   Documentation for `Omdb`.
   """
+  alias Omdb.Client
 
   @doc """
   Hello world.
 
   ## Examples
 
-      iex> Omdb.hello()
-      :world
+      # iex> Omdb.hello()
+      # :world
 
   """
-  def hello do
-    :world
+  def search(query, opts \\ []) do
+    Client.search(query, opts)
   end
 end
