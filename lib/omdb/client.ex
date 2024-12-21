@@ -7,25 +7,50 @@ defmodule Omdb.Client do
   @type opt() :: {:type | title_type()} | {:api_key, String.t()}
   @type resource_opt() :: {:plot, :short | :full} | opt()
 
-  @type search_opt() :: {:page | integer()}
+  @type search_opt() :: {:page | integer()} | opt()
 
-  @spec search(String.t(), opt()) :: {:ok, map()} | {:error, String.t()}
-  def search(query, opts \\ []) do
-    res =
-      opts
-      |> Enum.into(%{})
-      |> Map.merge(%{s: query})
-      |> url
-      |> then(fn url ->
-        Finch.build(:get, url) |> Finch.request(Omdb.Finch)
-      end)
+  @spec search(String.t(), [search_opt()]) :: {:ok, map()} | {:error, String.t()}
+  def search(query, opts) do
+    opts
+    |> Enum.into(%{})
+    |> Map.merge(%{s: query})
+    |> url
+    |> get()
+    |> parse_response()
+  end
 
-    with {:ok, %Finch.Response{status: 200, body: body}} <- res do
-      JSON.decode(body)
-    else
-      {:ok, %Finch.Response{status: status, body: body}} ->
-        {:error, "HTTP Error: #{status} - #{body}"}
-    end
+  @spec get_by_title(String.t(), [resource_opt()]) :: {:ok, map()} | {:error, String.t()}
+  def get_by_title(title, opts) do
+    opts
+    |> Enum.into(%{})
+    |> Map.merge(%{t: title})
+    |> url
+    |> get()
+    |> parse_response()
+  end
+
+  @spec get_by_id(String.t(), [resource_opt()]) :: {:ok, map()} | {:error, String.t()}
+  def get_by_id(title, opts) do
+    opts
+    |> Enum.into(%{})
+    |> Map.merge(%{i: title})
+    |> url
+    |> get()
+    |> parse_response()
+  end
+
+  defp get(url) do
+    Finch.build(:get, url)
+    |> Finch.request(Omdb.Finch)
+  end
+
+  defp parse_response({:ok, %Finch.Response{status: 200, body: body}}) do
+    {:ok, %Finch.Response{status: 200, body: body}}
+    JSON.decode(body)
+  end
+
+  defp parse_response({:ok, %Finch.Response{status: status, body: body}}) do
+    {:error, "HTTP Error: #{status} - #{body}"}
   end
 
   defp url(opts) do

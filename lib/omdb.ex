@@ -16,4 +16,12 @@ defmodule Omdb do
   def search(query, opts \\ []) do
     Client.search(query, opts)
   end
+
+  def get_by_title(title, opts \\ []) do
+    Client.get_by_title(title, opts)
+  end
+
+  def get_by_id(id, opts \\ []) do
+    Client.get_by_id(id, opts)
+  end
 end
