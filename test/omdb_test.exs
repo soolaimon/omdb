@@ -2,7 +2,7 @@ defmodule OmdbTest do
   use ExUnit.Case
   doctest Omdb
 
-  test "greets the world" do
-    assert Omdb.hello() == :world
+  test "search" do
+    Omdb.search("superman")  |> dbg()
   end
 end

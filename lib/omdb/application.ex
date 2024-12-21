@@ -10,6 +10,7 @@ defmodule Omdb.Application do
     children = [
       # Starts a worker by calling: Omdb.Worker.start_link(arg)
       # {Omdb.Worker, arg}
+      {Finch, name: Omdb.Finch}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
