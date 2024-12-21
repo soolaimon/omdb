@@ -45,7 +45,6 @@ defmodule Omdb.Client do
   end
 
   defp parse_response({:ok, %Finch.Response{status: 200, body: body}}) do
-    {:ok, %Finch.Response{status: 200, body: body}}
     JSON.decode(body)
   end
 
