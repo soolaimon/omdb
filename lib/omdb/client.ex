@@ -2,6 +2,7 @@ defmodule Omdb.Client do
   @base_url "www.omdbapi.com/"
   @image_url "img.omdbapi.com/"
 
+  @spec search(String.t(), keyword()) :: {:ok, map()} | {:error, String.t()}
   def search(query, opts \\ []) do
     res =
       opts
@@ -13,7 +14,7 @@ defmodule Omdb.Client do
       end)
 
     with {:ok, %Finch.Response{status: 200, body: body}} <- res do
-      JSON.decode(body) |> dbg()
+      JSON.decode(body)
     else
       {:ok, %Finch.Response{status: status, body: body}} ->
         {:error, "HTTP Error: #{status} - #{body}"}
