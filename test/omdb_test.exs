@@ -46,13 +46,15 @@ defmodule OmdbTest do
     assert res["Response"] == "True"
     assert Enum.count(res["Search"]) == 10
 
-    # expect(Finch, :request, fn req, Omdb.Finch ->
-    #   query_params = URI.query_decoder(req.query) |> Enum.into(%{})
-    #   assert query_params["page"] == "2"
-    #   {:ok, @search_res}
-    # end)
+    expect(Finch, :request, fn req, Omdb.Finch ->
+      query_params = URI.query_decoder(req.query) |> Enum.into(%{})
+      assert query_params["page"] == "2"
+      {:ok, @search_res}
+    end)
 
-    {:ok, _res} = Omdb.search("superman", apikey: "fakekey", type: :movie, page: 2) |> dbg()
-    {:ok, _res} = Omdb.search("superman", apikey: "fakekey", type: :movie, year: 2025) |> dbg()
+    {:ok, _res} = Omdb.search("superman", apikey: "fakekey", type: :movie, page: 2)
+  end
+
+  test "by_title" do
   end
 end

@@ -4,7 +4,7 @@ defmodule Omdb.Client do
 
   @type title_type() :: :movie | :series | :episode
 
-  @type opt() :: {:type | title_type()} | {:api_key, String.t()} | {:year, String.t()}
+  @type opt() :: {:type | title_type()} | {:api_key, String.t()}
   @type resource_opt() :: {:plot, :short | :full} | opt()
 
   @type search_opt() :: {:page | integer()}
