@@ -1,6 +1,9 @@
 defmodule OmdbTest do
   use ExUnit.Case
+  use Mimic
   doctest Omdb
+
+  setup :verify_on_exit!
 
   @search_response %Finch.Response{
     status: 200,
@@ -27,6 +30,19 @@ defmodule OmdbTest do
   }
 
   test "search" do
-    Omdb.search("superman", apikey: "")
+    expect(Finch, :request, fn req, Omdb.Finch ->
+      assert req.scheme == :http
+      assert req.method == "GET"
+      assert req.path == "/"
+      assert req.host == "www.omdbapi.com"
+      query_params = URI.query_decoder(req.query) |> Enum.into(%{}) |> dbg()
+      assert query_params["apikey"] == "fakekey"
+      assert query_params["t"] == "superman"
+      {:ok, @search_response}
+    end)
+
+    {:ok, res} = Omdb.search("superman", apikey: "fakekey")
+
+    assert res["Title"] == "Superman"
   end
 end

@@ -3,25 +3,31 @@ defmodule Omdb.Client do
   @image_url "img.omdbapi.com/"
 
   def search(query, opts \\ []) do
-    opts
-    |> Enum.into(%{})
-    |> Map.merge(%{t: query})
-    |> url
-    |> then(fn url ->
-      Finch.build(:get, url) |> Finch.request(Omdb.Finch)
-    end)
-    |> dbg()
+    res =
+      opts
+      |> Enum.into(%{})
+      |> Map.merge(%{t: query})
+      |> url
+      |> then(fn url ->
+        Finch.build(:get, url) |> Finch.request(Omdb.Finch)
+      end)
+
+    with {:ok, %Finch.Response{status: 200, body: body}} <- res do
+      JSON.decode(body) |> dbg()
+    else
+      {:ok, %Finch.Response{status: status, body: body}} ->
+        {:error, "HTTP Error: #{status} - #{body}"}
+    end
   end
 
   defp url(opts) do
     query = URI.encode_query(opts)
 
     %URI{
-      scheme: "https",
+      scheme: "http",
       host: @base_url,
       query: query
     }
     |> URI.to_string()
-    |> dbg()
   end
 end

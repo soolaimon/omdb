@@ -23,7 +23,8 @@ defmodule Omdb.MixProject do
   defp deps do
     [
       {:finch, "~> 0.19"},
-      {:mix_test_watch, "1.2.0", only: [:dev, :test]}
+      {:mix_test_watch, "1.2.0", only: [:dev, :test]},
+      {:mimic, "~> 1.10", only: :test}
     ]
   end
 end
