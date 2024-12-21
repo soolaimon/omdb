@@ -1,6 +1,6 @@
 # Omdb
 
-A Thin Elixir Wrapper for the OMDB API https://www.omdbapi.com/
+A Thin Elixir Wrapper for the OMDB (The Open Movie Database) API https://www.omdbapi.com/
 
 ## Installation
 

@@ -1,6 +1,5 @@
 defmodule Omdb.Client do
   @base_url "www.omdbapi.com/"
-  @image_url "img.omdbapi.com/"
 
   @type title_type() :: :movie | :series | :episode
 
@@ -9,6 +8,9 @@ defmodule Omdb.Client do
 
   @type search_opt() :: {:page | integer()} | opt()
 
+  @doc """
+  Search for a movie, series, or episode. Returns paginated results of 10 per page.
+  """
   @spec search(String.t(), [search_opt()]) :: {:ok, map()} | {:error, String.t()}
   def search(query, opts) do
     opts
@@ -19,6 +21,9 @@ defmodule Omdb.Client do
     |> parse_response()
   end
 
+  @doc """
+  Get a movie, series, or episode by title.
+  """
   @spec get_by_title(String.t(), [resource_opt()]) :: {:ok, map()} | {:error, String.t()}
   def get_by_title(title, opts) do
     opts
@@ -29,6 +34,9 @@ defmodule Omdb.Client do
     |> parse_response()
   end
 
+  @doc """
+  Get a movie, series, or episode by its IMDB id.
+  """
   @spec get_by_id(String.t(), [resource_opt()]) :: {:ok, map()} | {:error, String.t()}
   def get_by_id(title, opts) do
     opts
