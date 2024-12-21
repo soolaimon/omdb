@@ -36,7 +36,7 @@ defmodule Omdb.MixProject do
       name: "omdb",
       files: ["lib", "mix.exs", "README.md"],
       maintainers: ["Dave Nelson"],
-      licenses: ["APACHE"],
+      licenses: ["Apache-2.0"],
       links: %{"OMDB" => "https://www.omdbapi.com/"}
     ]
   end
