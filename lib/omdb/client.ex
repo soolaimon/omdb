@@ -2,12 +2,19 @@ defmodule Omdb.Client do
   @base_url "www.omdbapi.com/"
   @image_url "img.omdbapi.com/"
 
-  @spec search(String.t(), keyword()) :: {:ok, map()} | {:error, String.t()}
+  @type title_type() :: :movie | :series | :episode
+
+  @type opt() :: {:type | title_type()} | {:api_key, String.t()} | {:year, String.t()}
+  @type resource_opt() :: {:plot, :short | :full} | opt()
+
+  @type search_opt() :: {:page | integer()}
+
+  @spec search(String.t(), opt()) :: {:ok, map()} | {:error, String.t()}
   def search(query, opts \\ []) do
     res =
       opts
       |> Enum.into(%{})
-      |> Map.merge(%{t: query})
+      |> Map.merge(%{s: query})
       |> url
       |> then(fn url ->
         Finch.build(:get, url) |> Finch.request(Omdb.Finch)
